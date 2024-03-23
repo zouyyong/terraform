@@ -1,11 +1,24 @@
+#define aws provider 
 provider "aws" {
   region = var.region
 }
 
-resource "aws_s3_bucket" "example_bucket" {
+# state file backend 
+terraform {
+  backend "s3" {}
+}
+
+# define s3 bucket 
+resource "aws_s3_bucket" "terragrunt_bucket" {
   bucket = var.bucket_name
   acl    = "private"
 
+# enable versioning 
+  versioning {
+    enabled = true
+  }
+
+#enable encryption 
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -14,11 +27,13 @@ resource "aws_s3_bucket" "example_bucket" {
     }
   }
 
+#enable logging , specify loggingbucket 
   logging {
     target_bucket = var.logging_bucket
     target_prefix = var.logging_prefix
   }
 
+#define bucket lifecycle rule 
   dynamic "lifecycle_rule" {
     for_each = var.lifecycle_rules
 
@@ -38,12 +53,21 @@ resource "aws_s3_bucket" "example_bucket" {
     }
   }
 
+#define replication rule 
   replication_configuration {
     role           = var.replication_role
-    destination {
-      bucket = var.replication_destination_bucket_arn
+    rules {
+        id = "foobar"
+
+        status = "Enabled"
+
+        destination {
+        bucket        = var.replication_destination_bucket_arn
+        storage_class = "STANDARD"
+        }
     }
   }
+   
 
   tags = merge(var.common_tags, { Name = var.bucket_name })
 }

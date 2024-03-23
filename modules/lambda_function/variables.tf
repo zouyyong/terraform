@@ -1,2 +1,2 @@
 variable "region" {}
-# Add more variables as needed
+variable "lambda_bucket" {}
