@@ -46,16 +46,18 @@ modules/lambda_function/python/layers.zip: lambda layer zip file
 ## How to Run
 To deploy the infrastructure, follow these steps:
 
-Install Terraform and Terragrunt.
-Setup AWS credentials and AWS cli 
-Clone this repository.
-Navigate to the environments/dev directory and update variables defined in terragrunt.hcl
-Go to environments/dev/s3_bucket, Run terragrunt plan and terragrunt apply to deploy the s3 bucket.
-Go to environments/dev/lambda_function, Run terragrunt plan and terragrunt apply to deploy the lambda bucket.
+* Install Terraform and Terragrunt.
+* Setup AWS credentials and AWS cli 
+* Clone this repository.
+* Navigate to the environments/dev directory and update variables defined in terragrunt.hcl
+* Go to environments/dev/s3_bucket, Run terragrunt plan and terragrunt apply to deploy the s3 bucket.
+* Go to environments/dev/lambda_function, Run terragrunt plan and terragrunt apply to deploy the lambda bucket.
 
 ### Additional Information
-The Terraform code is designed to be modular, maintainable, and follows best practices.
-IAM User's permission should be adjusted accordingly, for example, need permission for S3, lambda. IAM
-The output folder includes the running logs for successful execution of both S3 and lambda 
+* The Terraform code is designed to be modular, maintainable, and follows best practices.
+* IAM User's permission should be adjusted accordingly, for example, need permission for S3, lambda. IAM
+* Additional S3 bucket is needed for replication
+* Two modules are run seperately (easy to debug),  to combine into a single run: use plan-all or create a new terraform file that include two modules.
+* The output folder includes the running logs for successful execution of both S3 and lambda 
 
 Feel free to reach out if you have any questions or encounter any issues!
